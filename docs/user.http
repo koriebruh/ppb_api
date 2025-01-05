@@ -1,0 +1,33 @@
+### CREATE ALL user
+POST http://localhost:3000/api/users
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user": "John Doe",
+  "username": "johndoe123",
+  "password": "securePassword123",
+  "role": "admin"
+}
+
+###
+PUT http://localhost:3000/api/users/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user": "John Doe Dll",
+  "username": "johndoe123",
+  "password": "securePassword123",
+  "role": "admin"
+}
+
+###
+POST http://localhost:3000/api/users/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "johndoe123",
+  "password": "securePassword123"
+}

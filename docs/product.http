@@ -1,0 +1,38 @@
+### GET ALL
+GET http://localhost:3000/api/products
+Accept: application/json
+Content-Type: application/json
+
+### GET BY ID
+GET http://localhost:3000/api/products/1
+Accept: application/json
+Content-Type: application/json
+
+### CREATE ALL PRODUCT
+POST http://localhost:3000/api/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Kamera Digital Canon EOS 90D",
+  "description": "Kamera DSLR dengan sensor 32.5MP dan kemampuan rekam video 4K.",
+  "price": 15000000.00,
+  "imageUrl": "https://example.com/canon-eos-90d.jpg"
+}
+
+### UPDATE
+PUT http://localhost:3000/api/products/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Laptop Gaming Banget",
+  "description": "Laptop gaming dengan performa tinggi untuk bermain game berat.",
+  "price": 15000000.50,
+  "imageUrl": "https://example.com/laptop-xyz.jpg"
+}
+
+### DELETE
+DELETE http://localhost:3000/api/products/1
+Accept: application/json
+Content-Type: application/json

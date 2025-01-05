@@ -1,0 +1,55 @@
+### ADD TO CART
+POST http://localhost:3000/api/carts
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "product_id" : 2,
+  "jumlah": 3
+}
+
+
+### GET KERANJNAG SAAT INI
+POST http://localhost:3000/api/carts/user
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": 1
+}
+
+### REMOVE
+POST http://localhost:3000/api/carts/remove
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "product_id" : 2
+}
+
+
+### ADD SHIPING TO GET RECIPT
+POST http://localhost:3000/api/carts/add-shipping
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "kota_asal": "Jakarta",
+  "kota_tujuan": "Bandung",
+  "biaya_ongkir": 25000,
+  "weight": 5.0
+}
+
+
+### VALIDATE PAYMENT
+POST http://localhost:3000/api/carts/checkout
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "is_paid": true
+}
