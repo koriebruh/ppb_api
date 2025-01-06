@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"koriebruh/uas-ppb/domain"
 	"log"
-	"log/slog"
+	"time"
 )
 
 func NewConnection() *gorm.DB {
@@ -24,17 +23,25 @@ func NewConnection() *gorm.DB {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}
 
-	if err = DB.AutoMigrate(
-		&domain.Product{},
-		&domain.User{},
-		&domain.Cart{},
-		&domain.CartItem{},
-		&domain.Shipping{},
-	); err != nil {
-		log.Fatalf("Error fail migrate: %v", err)
-	}
+	//if err = DB.AutoMigrate(
+	//	&domain.Product{},
+	//	&domain.User{},
+	//	&domain.Cart{},
+	//	&domain.CartItem{},
+	//	&domain.Shipping{},
+	//); err != nil {
+	//	log.Fatalf("Error fail migrate: %v", err)
+	//}
 
-	slog.Info("connection aws establish")
+	sqlDB, err := DB.DB()
+	if err != nil {
+		log.Fatalf("failed to get *sql.DB from GORM: %v", err)
+	}
+	sqlDB.SetMaxOpenConns(25)
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetConnMaxLifetime(15 * time.Minute)
+
+	log.Println("connection aws establish")
 
 	return DB
 }

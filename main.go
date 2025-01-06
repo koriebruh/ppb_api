@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/fiber/v2"
 	"koriebruh/uas-ppb/conf"
 	"koriebruh/uas-ppb/handler"
+	"net/http"
 )
 
-func main() {
-	//app := api.SetupApp()
-
+// SetupApp mengatur aplikasi
+func SetupApp() *fiber.App {
 	app := fiber.New()
 	conn := conf.NewConnection()
 	validate := validator.New()
@@ -36,5 +37,16 @@ func main() {
 	app.Post("/api/carts/checkout", userHandler.CheckoutAndClearCart)
 	app.Post("/api/carts/remove", userHandler.RemoveProductFromCart)
 
-	conf.STARTSERVER(app)
+	return app
+}
+
+// Handler untuk Vercel
+func Handler(w http.ResponseWriter, r *http.Request) {
+	app := SetupApp()
+	adaptor.FiberApp(app)(w, r) // Adaptasi Fiber ke http.Handler
+}
+
+func main() {
+	app := SetupApp()
+	conf.STARTSERVER(app) // Hanya untuk testing lokal
 }

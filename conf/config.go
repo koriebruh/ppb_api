@@ -29,21 +29,29 @@ type Config struct {
 func NewConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("error in load .env : ", err.Error())
+		log.Println("Warning: .env file not found, using default static configuration")
 	}
 
+	// Return Config with default fallback values
 	return &Config{
 		Server: Server{
-			Host: os.Getenv("SERVER_HOST"),
-			Port: os.Getenv("SERVER_PORT"),
+			Host: getEnv("SERVER_HOST", "localhost"),
+			Port: getEnv("SERVER_PORT", "3000"),
 		},
 		DataBase: DataBase{
-			User: os.Getenv("DB_USER"),
-			Pass: os.Getenv("DB_PASS"),
-			Host: os.Getenv("DB_HOST"),
-			Port: os.Getenv("DB_PORT"),
-			Name: os.Getenv("DB_NAME"),
+			User: getEnv("DB_USER", "admin"),
+			Pass: getEnv("DB_PASS", "korie123"),
+			Host: getEnv("DB_HOST", "13.210.50.68"),
+			Port: getEnv("DB_PORT", "3306"),
+			Name: getEnv("DB_NAME", "uas_ppb"),
 		},
 	}
 
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
 }
