@@ -1,15 +1,15 @@
 ### GET ALL
-GET http://localhost:3000/api/products
+GET https://api-ppb.vercel.app/api/products
 Accept: application/json
 Content-Type: application/json
 
 ### GET BY ID
-GET http://localhost:3000/api/products/1
+GET https://api-ppb.vercel.app/api/products/1
 Accept: application/json
 Content-Type: application/json
 
 ### CREATE ALL PRODUCT
-POST http://localhost:3000/api/products
+POST https://api-ppb.vercel.app//api/products
 Accept: application/json
 Content-Type: application/json
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### UPDATE
-PUT http://localhost:3000/api/products/1
+PUT https://api-ppb.vercel.app/api/products/1
 Accept: application/json
 Content-Type: application/json
 
@@ -33,6 +33,22 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3000/api/products/1
+DELETE https://api-ppb.vercel.app/api/products/1
+Accept: application/json
+Content-Type: application/json
+
+
+###
+GET https://api-ppb.vercel.app/api/users
+Accept: application/json
+Content-Type: application/json
+
+###
+DELETE https://api-ppb.vercel.app/api/users/20
+Accept: application/json
+Content-Type: application/json
+
+###
+GET https://api-ppb.vercel.app/api/carts/history
 Accept: application/json
 Content-Type: application/json

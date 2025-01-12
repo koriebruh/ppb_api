@@ -1,5 +1,5 @@
 ### CREATE ALL user
-POST http://localhost:3000/api/users
+POST https://api-ppb.vercel.app/api/users
 Accept: application/json
 Content-Type: application/json
 
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/api/users/1
+PUT https://api-ppb.vercel.app/users/1
 Accept: application/json
 Content-Type: application/json
 
@@ -23,11 +23,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/api/users/login
+POST https://api-ppb.vercel.app/api/users/login
 Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "johndoe123",
-  "password": "securePassword123"
+  "username": "aa",
+  "password": "aa"
 }
+
+

@@ -30,12 +30,15 @@ func SetupApp() *fiber.App {
 	app.Post("/api/users", userHandler.CreateUser)
 	app.Put("/api/users/:id", userHandler.UpdateUser)
 	app.Post("/api/users/login", userHandler.Login)
+	app.Delete("/api/users/:id", userHandler.RemoveUserById)
+	app.Get("/api/users", userHandler.FindAllUser)
 
 	app.Post("/api/carts", userHandler.AddProductToCart)
 	app.Post("/api/carts/user", userHandler.GetCartItems)
 	app.Post("/api/carts/add-shipping", userHandler.AddShippingAndGetTotal)
 	app.Post("/api/carts/checkout", userHandler.CheckoutAndClearCart)
 	app.Post("/api/carts/remove", userHandler.RemoveProductFromCart)
+	app.Get("/api/carts/history", userHandler.HistoryCheckout)
 
 	return app
 }

@@ -1,17 +1,17 @@
 ### ADD TO CART
-POST http://localhost:3000/api/carts
+POST https://api-ppb.vercel.app/api/carts
 Accept: application/json
 Content-Type: application/json
 
 {
   "user_id": 1,
-  "product_id" : 2,
+  "product_id" : 3,
   "jumlah": 3
 }
 
 
 ### GET KERANJNAG SAAT INI
-POST http://localhost:3000/api/carts/user
+POST https://api-ppb.vercel.app/api/carts/user
 Accept: application/json
 Content-Type: application/json
 
@@ -20,18 +20,18 @@ Content-Type: application/json
 }
 
 ### REMOVE
-POST http://localhost:3000/api/carts/remove
+POST https://api-ppb.vercel.app/api/carts/remove
 Accept: application/json
 Content-Type: application/json
 
 {
-  "user_id": 1,
+  "user_id": 4,
   "product_id" : 2
 }
 
 
 ### ADD SHIPING TO GET RECIPT
-POST http://localhost:3000/api/carts/add-shipping
+POST https://api-ppb.vercel.app/api/carts/add-shipping
 Accept: application/json
 Content-Type: application/json
 
@@ -45,7 +45,7 @@ Content-Type: application/json
 
 
 ### VALIDATE PAYMENT
-POST http://localhost:3000/api/carts/checkout
+POST https://api-ppb.vercel.app/api/carts/checkout
 Accept: application/json
 Content-Type: application/json
 

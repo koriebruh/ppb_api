@@ -24,9 +24,13 @@ type UserHandlerImpl interface {
 	CreateUser(ctx *fiber.Ctx) error
 	UpdateUser(ctx *fiber.Ctx) error
 	Login(ctx *fiber.Ctx) error
-	AddToCart(ctx *fiber.Ctx) error
-	RemoveFromCart(ctx *fiber.Ctx) error
-	GetCartSummary(ctx *fiber.Ctx) error
+	AddProductToCart(ctx *fiber.Ctx) error
+	GetCartItems(ctx *fiber.Ctx) error
+	AddShippingAndGetTotal(ctx *fiber.Ctx) error
+	CheckoutAndClearCart(ctx *fiber.Ctx) error
+	RemoveUserById(ctx *fiber.Ctx) error
+	FindAllUser(ctx *fiber.Ctx) error
+	HistoryCheckout(ctx *fiber.Ctx) error
 }
 
 func (h UserHandler) CreateUser(ctx *fiber.Ctx) error {
@@ -209,6 +213,7 @@ func (h UserHandler) GetCartItems(ctx *fiber.Ctx) error {
 
 		// Append the formatted item response
 		responseItems = append(responseItems, map[string]interface{}{
+			"product_id":   product.ID,
 			"product_name": product.Name,
 			"quantity":     cartItem.Jumlah,
 			"price":        cartItem.Harga,
@@ -345,4 +350,48 @@ func (h UserHandler) RemoveProductFromCart(ctx *fiber.Ctx) error {
 	return helper.SuccessResponse(ctx, map[string]interface{}{
 		"message": "Produk berhasil dihapus dari keranjang",
 	})
+}
+
+func (h UserHandler) RemoveUserById(ctx *fiber.Ctx) error {
+	params := ctx.Params("id")
+
+	if err := h.DB.Where("id = ?", params).Delete(&domain.User{}).Error; err != nil {
+		return helper.ErrResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, map[string]interface{}{
+		"message": "success delete consumer",
+	})
+}
+
+func (h UserHandler) FindAllUser(ctx *fiber.Ctx) error {
+	var users []domain.User
+
+	if err := h.DB.Where("role != ?", "admin").Find(&users).Error; err != nil {
+		return helper.ErrResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, users)
+}
+
+func (h UserHandler) HistoryCheckout(ctx *fiber.Ctx) error {
+	var purchaseHistory []dto.PurchaseHistory
+
+	err := h.DB.Table("cart_items").
+		Select(`
+			products.name AS name,
+			cart_items.jumlah AS jumlah,
+			products.price AS price,
+			cart_items.subtotal AS subtotal,
+			cart_items.deleted_at AS buy_time
+		`).
+		Joins("LEFT JOIN products ON cart_items.product_id = products.id").
+		Where("cart_items.deleted_at IS NOT NULL"). // Hanya history yang memiliki buy_time
+		Scan(&purchaseHistory).Error
+
+	if err != nil {
+		return helper.ErrResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, purchaseHistory)
 }
