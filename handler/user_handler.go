@@ -31,6 +31,8 @@ type UserHandlerImpl interface {
 	RemoveUserById(ctx *fiber.Ctx) error
 	FindAllUser(ctx *fiber.Ctx) error
 	HistoryCheckout(ctx *fiber.Ctx) error
+	HistoryCheckoutByTime(ctx *fiber.Ctx) error
+	HistoryCheckoutById(ctx *fiber.Ctx) error
 }
 
 func (h UserHandler) CreateUser(ctx *fiber.Ctx) error {
@@ -394,4 +396,65 @@ func (h UserHandler) HistoryCheckout(ctx *fiber.Ctx) error {
 	}
 
 	return helper.SuccessResponse(ctx, purchaseHistory)
+}
+
+func (h UserHandler) HistoryCheckoutByTime(ctx *fiber.Ctx) error {
+	// contoh format: "2025-01-10"
+	var req dto.HistoryDateReq
+	if err := ctx.BodyParser(&req); err != nil {
+		return helper.ErrResponse(ctx, err)
+	}
+
+	type Result struct {
+		Name     string    `json:"name"`
+		Jumlah   int       `json:"jumlah"`
+		Price    float64   `json:"price"`
+		Subtotal float64   `json:"subtotal"`
+		BuyTime  time.Time `json:"buy_time"`
+	}
+
+	var results []Result
+
+	// Query menggunakan raw SQL
+	if err := h.DB.Raw(`
+        SELECT p.name,
+               ci.jumlah,
+               p.price,
+               ci.subtotal,
+               ci.deleted_at as buy_time
+        FROM carts c
+                 RIGHT JOIN cart_items ci ON c.id = ci.cart_id
+                 LEFT JOIN products p ON ci.product_id = p.id
+        WHERE ci.deleted_at BETWEEN ? AND ?`,
+		req.StartDate, req.EndDate).Scan(&results).Error; err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to retrieve data",
+		})
+	}
+
+	return helper.SuccessResponse(ctx, results)
+}
+
+func (h UserHandler) HistoryCheckoutById(ctx *fiber.Ctx) error {
+	params := ctx.Params("id")
+	var results []struct {
+		Name     string     `json:"name"`
+		Jumlah   int        `json:"jumlah"`
+		Price    float64    `json:"price"`
+		Subtotal float64    `json:"subtotal"`
+		BuyTime  *time.Time `json:"buy_time"`
+	}
+
+	err := h.DB.Table("carts").
+		Select("products.name, cart_items.jumlah, products.price, cart_items.subtotal, cart_items.deleted_at AS buy_time").
+		Joins("RIGHT JOIN cart_items ON carts.id = cart_items.cart_id").
+		Joins("LEFT JOIN products ON cart_items.product_id = products.id").
+		Where("carts.user_id = ? AND cart_items.deleted_at IS NOT NULL", params).
+		Scan(&results).Error
+
+	if err != nil {
+		return helper.ErrResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, results)
 }

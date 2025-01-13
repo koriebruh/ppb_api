@@ -40,6 +40,9 @@ func SetupApp() *fiber.App {
 	app.Post("/api/carts/remove", userHandler.RemoveProductFromCart)
 	app.Get("/api/carts/history", userHandler.HistoryCheckout)
 
+	app.Get("/api/carts/history/user/:id", userHandler.HistoryCheckoutById)
+	app.Post("/api/carts/history", userHandler.HistoryCheckoutByTime)
+
 	return app
 }
 

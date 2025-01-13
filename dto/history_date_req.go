@@ -1,6 +1,6 @@
 package dto
 
-type HistoryDate struct {
+type HistoryDateReq struct {
 	StartDate string `json:"start_date"`
 	EndDate   string `json:"end_date"`
 }

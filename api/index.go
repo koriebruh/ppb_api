@@ -47,6 +47,8 @@ func SetupApp() *fiber.App {
 	app.Delete("/api/users/:id", userHandler.RemoveUserById)
 	app.Get("/api/users", userHandler.FindAllUser)
 	app.Get("/api/carts/history", userHandler.HistoryCheckout)
+	app.Get("/api/carts/history/user/:id", userHandler.HistoryCheckoutById)
+	app.Post("/api/carts/history", userHandler.HistoryCheckoutByTime)
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "*",

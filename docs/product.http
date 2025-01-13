@@ -52,3 +52,29 @@ Content-Type: application/json
 GET https://api-ppb.vercel.app/api/carts/history
 Accept: application/json
 Content-Type: application/json
+
+###
+GET https://api-ppb.vercel.app/api/carts/history/user/1
+Accept: application/json
+Content-Type: application/json
+
+###
+POST https://api-ppb.vercel.app/api/carts/history
+Accept: application/json
+Content-Type: application/json
+
+{
+  "start_date": "2025-01-01",
+  "end_date": "2025-01-10"
+}
+
+###
+POST http://localhost:3000/api/carts/history
+Accept: application/json
+Content-Type: application/json
+
+{
+  "start_date": "2025-01-01",
+  "end_date": "2025-01-10"
+}
+
